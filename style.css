@@ -76,4 +76,9 @@ footer {
         padding: 8px 16px;
     }
 }
-
+img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border: 2px solid #FFA500; /* Orange border */
+}
