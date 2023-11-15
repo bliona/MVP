@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compression</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #output {
+            display: none;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        #imageInput {
+            display: inline-block;
+            padding: 10px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        #compressedImage {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #downloadLink {
+            display: block;
+            margin: 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Compression Tool</h1>
+    
+    <input type="file" id="imageInput" accept="image/*" />
+    <button onclick="compressImage()">Compress Image</button>
+
+    <div id="output">
+        <h2>Compressed Image</h2>
+        <img id="compressedImage" alt="Compressed Image" />
+        <br>
+        <a id="downloadLink" download="compressed_image.jpg" href="#">Download Compressed Image</a>
+    </div>
+
+    <script>
+        function compressImage() {
+            const input = document.getElementById("imageInput");
+            const output = document.getElementById("output");
+            const compressedImage = document.getElementById("compressedImage");
+            const downloadLink = document.getElementById("downloadLink");
+
+            if (input.files.length === 0) {
+                alert("Please select an image to compress.");
+                return;
+            }
+
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function () {
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    canvas.width = 500; // Adjust the dimensions as needed
+                    canvas.height = (img.height / img.width) * canvas.width;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const compressedDataURL = canvas.toDataURL("image/jpeg", 0.7); // Adjust the compression quality as needed
+                    compressedImage.src = compressedDataURL;
+                    downloadLink.href = compressedDataURL;
+                    output.style.display = "block";
+                };
+            };
+
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
